@@ -1,0 +1,111 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <title>notification test & https</title>
+
+</head>
+<body>
+<input type="button" class="test-request-permission" value="Request Permission"/>
+<script src="./jquery.min.js" type="application/javascript"></script>
+<script>
+
+    function debug(str) {
+        $('body').append('<div style="color:gray;">[ '+(new Date()).toLocaleTimeString()+" ] " +Array.from(arguments).join(' ')+'</div>');
+    }
+
+    function n(){
+
+        var title = 'hello';
+        Notification.requestPermission(function (status) {
+            //console.log(status);
+            debug('status:', status);
+            // if(status !== 'granted') {
+            //     new Notification('权限', {body: '通知没有被允许'});
+            //     return  false;
+            // }
+            if (status === 'granted') {
+                debug(Notification)
+
+                try {
+                    var notification = new Notification('test', {
+                        dir: "auto", // 字体排版,auto,lt,rt
+                        //icon: 'http://ports:8050/static/img/icon_login.1168536.png', // 通知图标
+                        body: 'test message', // 主体内容
+                        renotify: false // 当有新消息提示时，是否一直关闭上一条提示
+                    });
+                    debug('new Notification');
+                    // error事件处理函数
+                    notification.onerror = function (err) {
+                        throw err;
+                    }
+                    // show事件处理函数
+                    notification.onshow = function (ev) {
+                        debug('onshow()');
+                        //console.log('onshow:', ev);
+                    }
+                    // click事件处理函数
+                    notification.onclick = function (ev) {
+                        //console.log(ev);
+                        notification.close();
+                    }
+                    // close事件处理函数
+                    notification.onclose = function (ev) {
+                        //console.log(ev);
+                        clearInterval(window.nh);
+                    }
+
+                    debug('created');
+                }catch(e) {
+                    debug(e.message);
+                }
+
+            }
+            // var n = new Notification('Title', {
+            //     body : 'I am a Notification',
+            //     icon : './images/test1.png'
+            // });
+            // setTimeout(function() {
+            //     n.close();
+            // }, 2000);
+        });
+    }
+
+
+    function n2() {
+
+        if ('serviceWorker' in navigator) {
+            debug('serviceWorker in navigator');
+
+            navigator.serviceWorker.register('/sw.js')
+                .then(function(registration) {
+                    debug('register() in callback')
+                    registration.addEventListener('updatefound', function() {
+                        // If updatefound is fired, it means that there's
+                        // a new service worker being installed.
+                        var installingWorker = registration.installing;
+                        console.log('A new service worker is being installed:',
+                            installingWorker);
+
+                        // You can listen for changes to the installing service worker's
+                        // state via installingWorker.onstatechange
+                    });
+                })
+                .catch(function(error) {
+                    debug(error.toString());
+                    console.log('Service worker registration failed:', error);
+                });
+        } else {
+            console.log('Service workers are not supported.');
+        }
+
+    }
+
+    $('.test-request-permission').click(function(){
+        //window.nh = setInterval(n, 6000);
+        //n();
+        n2();
+    });
+
+</script>
+</body>
