@@ -80,12 +80,11 @@
             navigator.serviceWorker.register('/sw.js')
                 .then(function(registration) {
                     debug('register() in callback');
-                    for(var k in registration) debug(typeof registration[k], k);
                     registration.addEventListener('updatefound', function() {
                         // If updatefound is fired, it means that there's
                         // a new service worker being installed.
                         var installingWorker = registration.installing;
-                        debug('A new service worker is being installed:',
+                        console.log('A new service worker is being installed:',
                             installingWorker);
 
                         // You can listen for changes to the installing service worker's
@@ -94,10 +93,10 @@
                 })
                 .catch(function(error) {
                     debug(error.toString());
-                    //debug('Service worker registration failed:', error);
+                    console.log('Service worker registration failed:', error);
                 });
         } else {
-            debug('Service workers are not supported.');
+            console.log('Service workers are not supported.');
         }
 
     }
