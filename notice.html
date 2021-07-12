@@ -85,7 +85,7 @@
                         // If updatefound is fired, it means that there's
                         // a new service worker being installed.
                         var installingWorker = registration.installing;
-                        console.log('A new service worker is being installed:',
+                        debug('A new service worker is being installed:',
                             installingWorker);
 
                         // You can listen for changes to the installing service worker's
@@ -94,10 +94,10 @@
                 })
                 .catch(function(error) {
                     debug(error.toString());
-                    console.log('Service worker registration failed:', error);
+                    //debug('Service worker registration failed:', error);
                 });
         } else {
-            console.log('Service workers are not supported.');
+            debug('Service workers are not supported.');
         }
 
     }
