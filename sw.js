@@ -1,4 +1,4 @@
-var CACHE_NAME = 'sw-test.v1.stoneon';
+var CACHE_NAME = 'sw-test.v2.stoneon';
 var urlsToCache = [
     '/notice.html',
     '/jquery.min.js',
